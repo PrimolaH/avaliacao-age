@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="false" />
+	
+	<package name="default" namespace="/" extends="struts-default">
+    
+		<interceptors>
+	        <interceptor name="sessionIntercept" class="com.empresa.struts.configuration.SessionInterceptor"/>
+	        <interceptor-stack name="interceptorStack">
+	            <interceptor-ref name="sessionIntercept"/>
+	            <interceptor-ref name="defaultStack"/>
+	        </interceptor-stack>
+	    </interceptors>
+	
+	    <default-interceptor-ref name="interceptorStack"/>
+	    
+	    <default-action-ref name="index" />
+	    
+	    <global-results>
+			<result name="login" type="redirect">/auth/login</result>
+		</global-results>		
+		
+        <action name="index" class="com.empresa.struts.controller.IndexController" method="execute">			
+            <result name="success" type="redirect">/funcionarios/consulta</result>
+            <result name="error412" type="redirect">/user-admin/create</result>
+        </action>
+                
+    </package>
+
+	<package name="user-admin" namespace="/user-admin" extends="struts-default">
+		<default-action-ref name="create" />
+        <action name="create" class="com.empresa.struts.controller.UsuarioAdminController" method="execute">
+			<result name="input">/views/user-admin/create.jsp</result>
+            <result name="success">/views/user-admin/success.jsp</result>
+            <result name="error">/views/user-admin/create.jsp</result>
+        </action>
+    </package>
+    
+     <!-- LOGIN -->
+    
+    <package name="auth" namespace="/auth"  extends="struts-default">
+		<default-action-ref name="login" />
+        <action name="login" class="com.empresa.struts.controller.LoginController" method="loginForm">
+			<result name="input">/views/auth/login.jsp</result>
+        </action>
+        
+        <action name="logout" class="com.empresa.struts.controller.LoginController" method="logout">
+		    <result name="success" type="redirect">/auth/login</result>
+		</action>
+
+        
+        <action name="execute" class="com.empresa.struts.controller.LoginController" method="execute">
+            <result name="success" type="redirect">/</result>
+            <result name="error">/views/auth/login.jsp</result>
+        </action>
+    </package>
+    
+     <!-- FUNCIONARIOS-->
+    
+    <package name="funcionarios" namespace="/funcionarios" extends="default">
+	    <default-action-ref name="index" />
+	    
+	    <action name="index" class="com.empresa.struts.controller.funcionarios.ConsultaController" method="execute">			
+	        <result name="success">/views/funcionarios/consulta.jsp</result>
+	    </action>
+	    
+	    <action name="cadastro" class="com.empresa.struts.controller.funcionarios.CadastroController" method="cadastro">			
+	        <result name="input">/views/funcionarios/cadastro.jsp</result>
+	    </action>
+	    
+	    <action name="executeCadastro" class="com.empresa.struts.controller.funcionarios.CadastroController" method="execute">			
+	        <result name="success">/views/funcionarios/cadastro.jsp</result>
+	        <result name="error">/views/funcionarios/cadastro.jsp</result>
+	    </action>
+	    
+	    <action name="excluir" class="com.empresa.struts.controller.funcionarios.CadastroController" method="excluir">			            
+	        <result name="success" type="redirect">/funcionarios/consulta</result>
+	        <result name="error">/views/funcionarios/cadastro.jsp</result>
+	    </action>
+	</package>
+	
+	 <!-- EXAMES -->
+    
+   <package name="exames" namespace="/exames" extends="default">
+		<default-action-ref name="index" />
+		
+        <action name="index" class="com.empresa.struts.controller.exames.ConsultaController" method="execute">
+            <result name="success">/views/exames/consulta.jsp</result>            
+        </action>
+        
+        <action name="cadastro" class="com.empresa.struts.controller.exames.CadastroController" method="cadastro">
+            <result name="input">/views/exames/cadastro.jsp</result>
+        </action>
+        
+        <action name="executeCadastro" class="com.empresa.struts.controller.exames.CadastroController" method="execute">
+            <result name="success">/views/exames/cadastro.jsp</result>
+            <result name="error">/views/exames/cadastro.jsp</result>
+        </action>
+        
+        <action name="excluir" class="com.empresa.struts.controller.exames.CadastroController" method="excluir">
+            <result name="success" type="redirect">/exames/consulta</result>
+            <result name="error">/views/exames/cadastro.jsp</result>
+        </action>
+    </package>
+    
+    <!-- EXAMES REALIZADOS-->
+    
+    <package name="exames_realizados" namespace="/exames-realizados" extends="default">
+		<default-action-ref name="index" />
+        <action name="index" class="com.empresa.struts.controller.exames_realizados.ConsultaController" method="execute">			
+            <result name="success">/views/exames_realizados/consulta.jsp</result>
+        </action>
+        
+        <action name="relatorio" class="com.empresa.struts.controller.exames_realizados.RelatorioController" method="execute">			
+            <result name="success">/views/exames_realizados/relatorio.jsp</result>
+        </action>
+        
+        <action name="cadastro" class="com.empresa.struts.controller.exames_realizados.CadastroController" method="cadastro">			
+	        <result name="input">/views/exames_realizados/cadastro.jsp</result>
+	    </action>
+	    
+	    <action name="executeCadastro" class="com.empresa.struts.controller.exames_realizados.CadastroController" method="execute">			
+	        <result name="success" type="redirect">/exames-realizados/consulta</result>
+	        <result name="error">/views/exames_realizados/cadastro.jsp</result>
+	    </action>
+    </package>
+    
+    <!-- USUARIOS-->
+    <package name="usuarios" namespace="/usuarios" extends="default">
+	    <default-action-ref name="index" />
+	    
+	    <action name="index" class="com.empresa.struts.controller.usuarios.ConsultaController" method="execute">			
+	        <result name="success">/views/usuarios/consulta.jsp</result>
+	    </action>
+	    
+	    <action name="cadastro" class="com.empresa.struts.controller.usuarios.CadastroController" method="cadastro">			
+	        <result name="input">/views/usuarios/cadastro.jsp</result>
+	    </action>
+	    
+	    <action name="executeCadastro" class="com.empresa.struts.controller.usuarios.CadastroController" method="execute">			
+	        <result name="success">/views/usuarios/cadastro.jsp</result>
+	        <result name="error">/views/usuarios/cadastro.jsp</result>
+	    </action>
+        
+        <action name="excluir" class="com.empresa.struts.controller.usuarios.CadastroController" method="excluir">
+            <result name="success" type="redirect">/usuarios/consulta</result>
+            <result name="error">/views/usuarios/cadastro.jsp</result>
+        </action>
+	</package>
+    
+
+</struts>
